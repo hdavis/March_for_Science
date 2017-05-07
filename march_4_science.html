@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-  <title>Get started with layers - 4.3</title>
+  <title>March for Science Crowd Sizes in the US</title>
 
   <link rel="stylesheet" href="https://js.arcgis.com/4.3/esri/css/main.css">
   <script src="https://js.arcgis.com/4.3/"></script>
@@ -34,19 +34,32 @@
     require([
         "esri/Map",
         "esri/views/SceneView",
+        "esri/layers/CSVLayer",
         "esri/layers/TileLayer",
+        "esri/renderers/SimpleRenderer",
+        "esri/symbols/PointSymbol3D",
+        "esri/symbols/IconSymbol3DLayer",
+        "esri/config",
+        "esri/core/urlUtils",
         "dojo/dom",
         "dojo/on",
         "dojo/domReady!"
       ],
       function(
-        Map, SceneView, TileLayer, dom, on
-      ) {
+        Map, 
+        SceneView, 
+        CSVLayer,
+        TileLayer, 
+        SimpleRenderer,
+        PointSymbol3D,
+        IconSymbol3DLayer,
+        esriConfig,
+        urlUtils,
+        dom, 
+        on) {
 
         /*****************************************************************
-         * Create two TileLayer instances. One pointing to a
-         * cached map service depicting U.S. male population and the other
-         * pointing to a layer of roads and highways.
+         * Create a TileLayer instance pointing to a layer of roads and highways.
          *****************************************************************/
         var transportationLyr = new TileLayer({
           url: "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer",
@@ -55,18 +68,66 @@
           visible: false
         });
 
-        var housingLyr = new TileLayer({
+    /*    var housingLyr = new TileLayer({
           url: "https://tiles.arcgis.com/tiles/nGt4QxSblgDfeJn9/arcgis/rest/services/New_York_Housing_Density/MapServer",
           id: "ny-housing",
           opacity: 0.9
         });
+    */
+        var url = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.csv";
+        // If CSV files are not on the same domain as our website, a CORS enabled server
+        // or a proxy is required.
+        urlUtils.addProxyRule({
+            urlPrefix: "earthquake.usgs.gov",
+            proxyUrl: "/sproxy/"
+        });
 
+        
+        var template = {
+        title: "Earthquake Info",
+        content: "Magnitude {mag} {type} hit {place} on {time}."
+        };
+        
+        /*var csvLayer = new CSVLayer({
+         url: url,
+         copyright: "USGS Earthquakes"
+        });
+        map.add(csvLayer);  // adds the layer to the map
+        */
+        
+        var csvLayer = new CSVLayer({
+            url: url,
+            copyright: "USGS Earthquakes",
+            popupTemplate: template,
+            elevationInfo: {
+              // drapes icons on the surface of the globe
+              mode: "on-the-ground"
+            }
+        });
+
+        csvLayer.renderer = new SimpleRenderer({
+            symbol: new PointSymbol3D({
+              symbolLayers: [
+                new IconSymbol3DLayer({
+                  material: {
+                    color: [238, 69, 0, 0.75]
+                  },
+                  outline: {
+                    width: 0.5,
+                    color: "white"
+                  },
+                  size: "12px"
+                })
+              ]
+            })
+        });
+        
         /*****************************************************************
          * Layers may be added to the map in the map's constructor
          *****************************************************************/
         var map = new Map({
           basemap: "oceans",
-          layers: [housingLyr]
+          layers: [csvLayer]
         });
 
         /*****************************************************************
@@ -75,8 +136,10 @@
         map.add(transportationLyr);
 
         var view = new SceneView({
-          container: "viewDiv",
-          map: map
+            container: "viewDiv",
+            center: [138, 35],
+            zoom: 4,
+            map: map
         });
 
         /*****************************************************************
@@ -84,12 +147,12 @@
          * take care of renderering the layers
          *****************************************************************/
         view.on("layerview-create", function(event) {
-          if (event.layer.id === "ny-housing") {
+          /* if (event.layer.id === "ny-housing") {
             // Explore the properties of the population layer's layer view here
             console.log("LayerView for male population created!", event.layerView);
-          }
+          } 
+          */
           if (event.layer.id === "streets") {
-            // Explore the properties of the transportation layer's layer view here
             // Explore the properties of the transportation layer's layer view here
             console.log("LayerView for streets created!", event.layerView);
           }
@@ -101,8 +164,8 @@
          * the view will animate to it's initial extent.
          *****************************************************************/
         view.then(function() {
-          housingLyr.then(function() {
-            view.goTo(housingLyr.fullExtent);
+          csvLayer.then(function() {
+            view.goTo(csvLayer.fullExtent);
           });
         });
 
