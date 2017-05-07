@@ -76,54 +76,24 @@
     */
         
         
-        
-    /*    
-        var url = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.csv";
-        // If CSV files are not on the same domain as our website, a CORS enabled server
-        // or a proxy is required.
-        urlUtils.addProxyRule({
-            urlPrefix: "earthquake.usgs.gov",
-            proxyUrl: "/sproxy/"
-        });
-
+        var url = "https://github.com/hdavis/March_for_Science/blob/master/Marches_for_Science_Cleaned_Tiny.csv";
         
         var template = {
-        title: "Earthquake Info",
-        content: "Magnitude {mag} {type} hit {place} on {time}."
+          title: "March for Science Info",
+          content: "Number of People {BestGuess}."
         };
         
-        */
-        
-        
-        /*var csvLayer = new CSVLayer({
-         url: url,
-         copyright: "USGS Earthquakes"
-        });
-        map.add(csvLayer);  // adds the layer to the map
-        */
-        
-      // Typical usage
-    var csvlayer = new CSVLayer({
-      // URL to the CSV file
-      url: "https://github.com/hdavis/March_for_Science/blob/master/Marches_for_Science_Cleaned_Tiny.csv",
-        elevationInfo: {
-              // drapes icons on the surface of the globe
-              mode: "on-the-ground"
-        }
-    });
-        
-        /*
         var csvLayer = new CSVLayer({
-            url: url,
-            copyright: "USGS Earthquakes",
-            popupTemplate: template,
-            elevationInfo: {
-              // drapes icons on the surface of the globe
-              mode: "on-the-ground"
-            }
+          url: url,
+          copyright: "data.world",
+          popupTemplate: template,
+          elevationInfo: {
+            // drapes icons on the surface of the globe
+          mode: "on-the-ground"
+          }
         });
-*/
-        
+         
+
         csvLayer.renderer = new SimpleRenderer({
             symbol: new PointSymbol3D({
               symbolLayers: [
@@ -152,12 +122,13 @@
         /*****************************************************************
          * Or they may be added to the map using map.add()
          *****************************************************************/
+        //map.add(csvLayer);  // adds the layer to the map
         map.add(transportationLyr);
 
         var view = new SceneView({
             container: "viewDiv",
-            center: [138, 35],
-            zoom: 4,
+            //center: [138, 35],
+            //zoom: 4,
             map: map
         });
 
