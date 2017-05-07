@@ -74,6 +74,10 @@
           opacity: 0.9
         });
     */
+        
+        
+        
+    /*    
         var url = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.csv";
         // If CSV files are not on the same domain as our website, a CORS enabled server
         // or a proxy is required.
@@ -88,6 +92,9 @@
         content: "Magnitude {mag} {type} hit {place} on {time}."
         };
         
+        */
+        
+        
         /*var csvLayer = new CSVLayer({
          url: url,
          copyright: "USGS Earthquakes"
@@ -95,6 +102,13 @@
         map.add(csvLayer);  // adds the layer to the map
         */
         
+      // Typical usage
+    var csvlayer = new CSVLayer({
+      // URL to the CSV file
+      url: "https://github.com/hdavis/March_for_Science/blob/master/Marches_for_Science_Locations.csv"
+    });
+        
+        /*
         var csvLayer = new CSVLayer({
             url: url,
             copyright: "USGS Earthquakes",
@@ -104,7 +118,8 @@
               mode: "on-the-ground"
             }
         });
-
+*/
+        
         csvLayer.renderer = new SimpleRenderer({
             symbol: new PointSymbol3D({
               symbolLayers: [
