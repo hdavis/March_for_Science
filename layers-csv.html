@@ -40,17 +40,16 @@
       esriConfig,
       urlUtils) {
 
-      var url =
-        "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.csv";
+      var url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.csv";
 
       // If CSV files are not on the same domain as your website, a CORS enabled server
       // or a proxy is required.
-
+      esriConfig.request.corsEnabledServers.push(url);
       urlUtils.addProxyRule({
         urlPrefix: "earthquake.usgs.gov",
         proxyUrl: "/sproxy/"
       });
-
+        
       // Paste the url into a browser's address bar to download and view the attributes
       // in the CSV file. These attributes include:
       // * mag - magnitude
@@ -68,8 +67,7 @@
         copyright: "USGS Earthquakes",
         popupTemplate: template,
         elevationInfo: {
-          // drapes icons on the surface of the globe
-          mode: "on-the-ground"
+          mode: "on-the-ground"  // drapes icons on the surface of the globe
         }
       });
 
