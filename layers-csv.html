@@ -50,6 +50,11 @@
         proxyUrl: "/sproxy/"
       });
         
+      /* Wonder if problem has to do with this paragraph from this web page: https://developers.arcgis.com/javascript/latest/api-reference/esri-layers-TileLayer.html
+      
+      If the image is requested from a different domain, a CORS enabled server or a proxy is required. If CORS is enabled on the server add the service domain to esriConfig.request.corsEnabledServers. Alternatively, if CORS cannot be enabled on ArcGIS Server you can set up a proxy on your web server and then add it to the proxy rules list in esriConfig using addProxyRule().
+      */    
+        
       // Paste the url into a browser's address bar to download and view the attributes
       // in the CSV file. These attributes include:
       // * mag - magnitude
@@ -93,7 +98,7 @@
         layers: [csvLayer]
       });
 
-      map.add(csvLayer);
+     // map.add(csvLayer); // adding this did not solve problem and in theory is redundant.
         
       var view = new SceneView({
         container: "viewDiv",
