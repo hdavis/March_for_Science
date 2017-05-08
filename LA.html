@@ -48,16 +48,16 @@
          * cached map service depicting U.S. male population and the other
          * pointing to a layer of roads and highways.
          *****************************************************************/
-        var OpenSpaceLyr = new TileLayer({
-          url: "https://tiles.arcgis.com/tiles/nGt4QxSblgDfeJn9/arcgis/rest/services/Singapore_Open_Space/MapServer",
+        var transportationLyr = new TileLayer({
+          url: "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer",
           // This property can be used to uniquely identify the layer
-          id: "open_space",
+          id: "streets",
           visible: false
         });
 
         var housingLyr = new TileLayer({
           //url: "https://tiles.arcgis.com/tiles/nGt4QxSblgDfeJn9/arcgis/rest/services/New_York_Housing_Density/MapServer",
-          url: "https://tiles.arcgis.com/tiles/nGt4QxSblgDfeJn9/arcgis/rest/services/Singapore_Population_Density_6class/MapServer",
+          url: "https://tiles1.arcgis.com/tiles/nGt4QxSblgDfeJn9/arcgis/rest/services/Los_Angeles_Footprint/MapServer",
           id: "ny-housing",
           opacity: 0.9
         });
@@ -73,7 +73,7 @@
         /*****************************************************************
          * Or they may be added to the map using map.add()
          *****************************************************************/
-        map.add(OpenSpaceLyr);
+        map.add(transportationLyr);
 
         var view = new SceneView({
           container: "viewDiv",
@@ -87,11 +87,12 @@
         view.on("layerview-create", function(event) {
           if (event.layer.id === "ny-housing") {
             // Explore the properties of the population layer's layer view here
-            console.log("LayerView for Singapore population created!", event.layerView);
+            console.log("LayerView for male population created!", event.layerView);
           }
-          if (event.layer.id === "open_space") {
-            // Explore the properties of the open space layer's layer view here
-            console.log("LayerView for Singapore open space created!", event.layerView);
+          if (event.layer.id === "streets") {
+            // Explore the properties of the transportation layer's layer view here
+            // Explore the properties of the transportation layer's layer view here
+            console.log("LayerView for streets created!", event.layerView);
           }
         });
 
@@ -101,12 +102,12 @@
          * the view will animate to it's initial extent.
          *****************************************************************/
         view.then(function() {
-          housingLyr.then(function() 
+          housingLyr.then(function() {
             view.goTo(housingLyr.fullExtent);
           });
         });
 
-        var OpenSpaceLyrToggle = dom.byId("OpenSpaceLyr");
+        var streetsLyrToggle = dom.byId("streetsLyr");
 
         /*****************************************************************
          * The visible property on the layer can be used to toggle the
@@ -114,8 +115,8 @@
          * the layer is still part of the map, which means you can access
          * its properties and perform analysis even though it isn't visible.
          *******************************************************************/
-        on(OpenSpaceLyrToggle, "change", function() {
-          OpenSpaceLyr.visible = OpenSpaceLyrToggle.checked;
+        on(streetsLyrToggle, "change", function() {
+          transportationLyr.visible = streetsLyrToggle.checked;
         });
       });
   </script>
@@ -124,7 +125,7 @@
 <body>
   <div id="viewDiv"></div>
   <span id="layerToggle">
-    <input type="checkbox" id="OpenSpaceLyr"> OpenSpace
+    <input type="checkbox" id="streetsLyr"> Transportation
   </span>
 </body>
 
